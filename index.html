@@ -6,7 +6,7 @@
     <title>Mon Portail de Jeux</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: #1a1a1a;
             color: white;
             display: flex;
@@ -15,44 +15,42 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            text-align: center; /* FORCE LE CENTRAGE GLOBAL */
+            text-align: center;
             padding: 20px;
-            box-sizing: border-box;
         }
-        h1 { color: #00d4ff; margin-bottom: 10px; font-size: 1.8rem; width: 100%; }
-        .subtitle { color: #bbb; margin-bottom: 30px; }
-        
+        h1 { color: #00d4ff; font-size: 2.5rem; margin-bottom: 10px; }
+        .subtitle { font-size: 1.2rem; color: #bbb; margin-bottom: 40px; }
         .games-wrapper {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             justify-content: center;
-            flex-wrap: wrap; /* MET LES CARTES L'UNE SOUS L'AUTRE SUR MOBILE */
+            flex-wrap: wrap; /* */
             width: 100%;
+            max-width: 1000px;
         }
-
         .game-card {
             background: #2a2a2a;
-            padding: 20px;
-            border-radius: 15px;
+            padding: 30px;
+            border-radius: 20px;
             border: 2px solid #444;
-            width: 280px; /* TAILLE ADAPTÉE MOBILE */
+            width: 320px;
+            min-height: 250px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-sizing: border-box;
+            transition: 0.3s;
         }
-
+        .game-card h3 { font-size: 1.8rem; margin-top: 0; }
         button {
             background-color: #00d4ff;
             border: none;
-            padding: 15px; /* BOUTON PLUS GROS POUR LES DOIGTS */
-            border-radius: 8px;
+            padding: 18px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 1.2rem;
             color: #1a1a1a;
             width: 100%;
-            margin-top: 15px;
-            font-size: 1rem;
         }
         a { text-decoration: none; width: 100%; }
     </style>
@@ -60,7 +58,6 @@
 <body>
     <h1>Bienvenue sur mon site de jeux</h1>
     <p class="subtitle">Choisissez votre défi du jour :</p>
-    
     <div class="games-wrapper">
         <div class="game-card">
             <div>
@@ -69,7 +66,6 @@
             </div>
             <a href="2048.html"><button>JOUER</button></a>
         </div>
-
         <div class="game-card">
             <div>
                 <h3>Tusmo / Sutom</h3>
