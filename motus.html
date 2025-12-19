@@ -7,7 +7,6 @@
     <style>
         body { background-color: #1a1a1a; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin: 0; padding: 10px; min-height: 100vh; box-sizing: border-box; }
         
-        /* Bouton retour avec uniquement l'émoji */
         .btn-home { position: absolute; top: 15px; left: 15px; background: #444; color: white; text-decoration: none; padding: 10px; border-radius: 50%; font-size: 1.2rem; z-index: 100; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
 
         h1 { font-size: 2.2rem; margin: 10px 0; color: #00d4ff; letter-spacing: 5px; }
@@ -21,8 +20,8 @@
         .present { background-color: #f1c40f; border-color: #f1c40f; border-radius: 50%; }
         .absent { background-color: #34495e; border-color: #34495e; }
 
-        /* Style pour les touches désactivées */
-        .key.key-disabled { opacity: 0.2; pointer-events: none; background-color: #222; }
+        /* Style pour les touches des lettres absentes : grises mais cliquables */
+        .key.key-absent { background-color: #222 !important; color: #555; }
 
         .keyboard { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 500px; margin-top: auto; padding-bottom: 10px; }
         .kb-row { display: flex; justify-content: center; gap: 6px; }
@@ -73,7 +72,7 @@
         let currentGuess = "";
         let currentAttempt = 0;
         let isGameOver = false;
-        let discoveredLetters = {}; // Stocke l'état des lettres (correct, present, absent)
+        let discoveredLetters = {}; 
 
         for (let i = 0; i < 6; i++) {
             const row = document.createElement('div'); row.className = 'row';
@@ -84,6 +83,26 @@
             }
             grid.appendChild(row);
         }
+
+        // --- SUPPORT DU CLAVIER PHYSIQUE ---
+        window.addEventListener('keydown', (e) => {
+            if (isGameOver) return;
+            
+            const key = e.key.toUpperCase();
+            
+            // Si c'est une lettre de A à Z
+            if (key.length === 1 && key >= 'A' && key <= 'Z') {
+                addLetter(key);
+            } 
+            // Si c'est la touche retour (effacer)
+            else if (e.key === 'Backspace') {
+                deleteLetter();
+            } 
+            // Si c'est la touche Entrée
+            else if (e.key === 'Enter') {
+                submitGuess();
+            }
+        });
 
         function addLetter(l) {
             if (isGameOver || currentGuess.length >= 5) return;
@@ -117,7 +136,6 @@
             const row = grid.children[currentAttempt];
             const targetArr = targetWord.split('');
             
-            // 1ere passe : Lettres correctes
             for (let i = 0; i < 5; i++) {
                 row.children[i].innerText = guess[i];
                 if (guess[i] === targetWord[i]) {
@@ -127,7 +145,6 @@
                 }
             }
             
-            // 2eme passe : Presentes ou Absentes
             for (let i = 0; i < 5; i++) {
                 if (!row.children[i].classList.contains('correct')) {
                     const idx = targetArr.indexOf(guess[i]);
@@ -142,7 +159,6 @@
                 }
             }
 
-            // Mise à jour visuelle du clavier
             updateKeyboardUI();
 
             if (guess === targetWord) showEndScreen(true);
@@ -153,7 +169,8 @@
             for (let letter in discoveredLetters) {
                 const keyBtn = document.getElementById(`key-${letter}`);
                 if (keyBtn && discoveredLetters[letter] === 'absent') {
-                    keyBtn.classList.add('key-disabled');
+                    // On change juste la couleur sans bloquer le clic
+                    keyBtn.classList.add('key-absent');
                 }
             }
         }
