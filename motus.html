@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon Tusmo - 3000 Mots</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-rows: repeat(6, 55px);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: repeat(5, 55px);
+            gap: 8px;
+        }
+
+        .cell {
+            width: 55px;
+            height: 55px;
+            border: 2px solid #444;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .correct {
+            background-color: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .present {
+            background-color: #f1c40f;
+            border-color: #f1c40f;
+            border-radius: 50%;
+        }
+
+        .absent {
+            background-color: #34495e;
+            border-color: #34495e;
+        }
+
+        input {
+            background: #2a2a2a;
+            border: 2px solid #00d4ff;
+            color: white;
+            padding: 12px;
+            font-size: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            width: 220px;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        #message {
+            margin: 15px;
+            font-size: 1.2rem;
+            height: 1.5rem;
+            color: #00d4ff;
+            font-weight: bold;
+        }
+
+        .btn-retour {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: #444;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>TUSMO</h1>
+    <div id="message"></div>
+    <div class="grid" id="grid"></div>
+    <input type="text" id="guess-input" maxlength="5" autofocus>
+    <br>
+    <a href="index.html" class="btn-retour">⬅ Retour à l'accueil</a>
+
+    <script src="dictionnaire.js"></script>
+
+    <script>
+        // LOGIQUE DE SÉLECTION SANS RÉPÉTITION
+        const startDate = new Date("2023-12-19"); // Date de lancement de ton site
+        const today = new Date();
+        const diffInTime = today.getTime() - startDate.getTime();
+        const diffInDays = Math.floor(diffInTime / (1000 * 3600 * 24));
+
+        // On choisit le mot selon le nombre de jours écoulés depuis le début
+        // Tant que ta liste est unique, le mot ne reviendra jamais avant la fin de la liste !
+        const targetWord = dictionnaire[diffInDays % dictionnaire.length];
+
+        const grid = document.getElementById('grid');
+        const input = document.getElementById('guess-input');
+        const message = document.getElementById('message');
+        let currentAttempt = 0;
+
+        // Création de la grille (Identique au précédent)
+        for (let i = 0; i < 6; i++) {
+            const row = document.createElement('div');
+            row.className = 'row';
+            for (let j = 0; j < 5; j++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                if (i === 0 && j === 0) cell.innerText = targetWord[0];
+                row.appendChild(cell);
+            }
+            grid.appendChild(row);
+        }
+
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const guess = input.value.toUpperCase();
+                if (guess.length !== 5) return;
+                checkGuess(guess);
+                input.value = "";
+            }
+        });
+
+        function checkGuess(guess) {
+            const row = grid.children[currentAttempt];
+            const cells = row.children;
+            const targetArr = targetWord.split('');
+            for (let i = 0; i < 5; i++) {
+                cells[i].innerText = guess[i];
+                if (guess[i] === targetWord[i]) {
+                    cells[i].classList.add('correct');
+                    targetArr[i] = null;
+                }
+            }
+            for (let i = 0; i < 5; i++) {
+                if (!cells[i].classList.contains('correct')) {
+                    const idx = targetArr.indexOf(guess[i]);
+                    if (idx !== -1) {
+                        cells[i].classList.add('present');
+                        targetArr[idx] = null;
+                    } else {
+                        cells[i].classList.add('absent');
+                    }
+                }
+            }
+            if (guess === targetWord) {
+                message.innerText = "BRAVO ! 🎉";
+                input.disabled = true;
+            } else {
+                currentAttempt++;
+                if (currentAttempt === 6) {
+                    message.innerText = "PERDU ! C'était : " + targetWord;
+                    input.disabled = true;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

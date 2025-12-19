@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Portail de Jeux</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            color: #00d4ff;
+            margin-bottom: 30px;
+        }
+
+        /* C'est ici qu'on aligne les boites */
+        .games-wrapper {
+            display: flex; /* Aligne les éléments en ligne */
+            gap: 20px; /* Espace entre les boites */
+            justify-content: center;
+            flex-wrap: wrap; /* Pour que ça reste joli sur téléphone */
+        }
+
+        .game-card {
+            background: #2a2a2a;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #444;
+            width: 260px;
+            transition: transform 0.3s, border-color 0.3s;
+            /* Ces 3 lignes forcent la même hauteur et alignent le bouton en bas */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+            .game-card:hover {
+                transform: scale(1.05);
+                border-color: #00d4ff;
+            }
+
+        .game-info h3 {
+            margin-top: 0;
+            color: #fff;
+        }
+
+        .game-info p {
+            color: #bbb;
+            line-height: 1.4;
+        }
+
+        button {
+            background-color: #00d4ff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #1a1a1a;
+            width: 100%;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+
+            button:hover {
+                background-color: #00b8e6;
+            }
+
+        a {
+            text-decoration: none;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Bienvenue sur mon site de jeux</h1>
+    <p style="margin-bottom: 40px;">Choisissez votre défi du jour :</p>
+
+    <div class="games-wrapper">
+        <div class="game-card">
+            <div class="game-info">
+                <h3>Jeu 2048</h3>
+                <p>Fusionnez les nombres pour atteindre la tuile 2048 !</p>
+            </div>
+            <a href="2048.html"><button>JOUER</button></a>
+        </div>
+
+        <div class="game-card">
+            <div class="game-info">
+                <h3>Tusmo / Sutom</h3>
+                <p>Devinez le mot caché en seulement 6 essais.</p>
+            </div>
+            <a href="motus.html"><button>JOUER</button></a>
+        </div>
+    </div>
+
+</body>
+</html>
