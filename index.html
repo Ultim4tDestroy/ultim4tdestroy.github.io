@@ -3,27 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Portail de Jeux</title>
+    <title>Mon Portail de Jeux - 2048 & Tusmo</title>
+    
     <link rel="icon" type="image/jpeg" href="favicon.jpeg">
     <link rel="apple-touch-icon" href="favicon.jpeg">
+
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: #1a1a1a;
             color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
             margin: 0;
             text-align: center;
             padding: 20px;
-            box-sizing: border-box;
+            min-height: 100vh;
         }
-        h1 { color: #00d4ff; margin-bottom: 10px; font-size: 2.5rem; width: 100%; }
-        .subtitle { color: #bbb; margin-bottom: 40px; font-size: 1.2rem; }
+        h1 { color: #00d4ff; font-size: 2.5rem; margin-top: 40px; margin-bottom: 10px; }
+        .subtitle { font-size: 1.2rem; color: #bbb; margin-bottom: 40px; }
         
+        /* Conteneur des jeux */
         .games-wrapper {
             display: flex;
             gap: 30px;
@@ -31,6 +32,7 @@
             flex-wrap: wrap; /* */
             width: 100%;
             max-width: 1000px;
+            margin-bottom: 60px;
         }
 
         .game-card {
@@ -43,13 +45,9 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-sizing: border-box;
-            transition: transform 0.3s, border-color 0.3s;
+            transition: 0.3s;
         }
-
-        .game-card:hover { transform: scale(1.05); border-color: #00d4ff; }
-        .game-card h3 { font-size: 1.8rem; margin-top: 0; }
-        .game-card p { font-size: 1.1rem; color: #ccc; line-height: 1.5; }
+        .game-card:hover { border-color: #00d4ff; transform: translateY(-5px); }
 
         button {
             background-color: #00d4ff;
@@ -58,25 +56,46 @@
             border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 1.2rem;
             color: #1a1a1a;
             width: 100%;
-            margin-top: 15px;
-            font-size: 1.2rem;
-            transition: background 0.2s;
         }
-        button:hover { background-color: #00b8e6; }
+
+        /* --- NOUVELLE SECTION RÈGLES --- */
+        .info-section {
+            max-width: 800px;
+            text-align: left;
+            background: #222;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+        .info-section h2 { color: #00d4ff; border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 30px; }
+        .info-section p, .info-section li { color: #ccc; }
+        .info-section b { color: white; }
+
+        footer { margin-top: 50px; padding: 20px; color: #555; font-size: 0.9rem; }
+        footer a { color: #555; text-decoration: underline; }
+
         a { text-decoration: none; width: 100%; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .info-section { padding: 20px; width: 95%; }
+        }
     </style>
 </head>
 <body>
-    <h1>Bienvenue !!</h1>
-    <p class="subtitle">Choisissez votre défi du jour :</p>
+    <h1>Bienvenue sur mon site de jeux</h1>
+    <p class="subtitle">Des défis quotidiens pour entraîner votre cerveau.</p>
     
     <div class="games-wrapper">
         <div class="game-card">
             <div>
                 <h3>Jeu 2048</h3>
-                <p>Fusionnez les nombres pour atteindre la tuile 2048 !</p>
+                <p>Fusionnez les nombres pour atteindre la tuile 2048 ! Un classique indémodable du puzzle.</p>
             </div>
             <a href="2048.html"><button>JOUER</button></a>
         </div>
@@ -84,14 +103,39 @@
         <div class="game-card">
             <div>
                 <h3>Tusmo / Sutom</h3>
-                <p>Devinez le mot du jour en seulement 6 essais.</p>
+                <p>Devinez le mot du jour en 6 essais. Un nouveau mot chaque jour pour tester votre vocabulaire.</p>
             </div>
             <a href="motus.html"><button>JOUER</button></a>
         </div>
     </div>
+
+    <div class="info-section">
+        <h2>Comment jouer au 2048 ?</h2>
+        <p>Le but du jeu est de faire glisser des tuiles sur une grille pour les combiner et créer une tuile portant le nombre <b>2048</b>.</p>
+        <ul>
+            <li>Utilisez les <b>flèches du clavier</b> ou faites <b>glisser votre doigt</b> sur l'écran.</li>
+            <li>Lorsque deux tuiles avec le même nombre se touchent, elles <b>fusionnent</b> en une seule !</li>
+            <li>Le jeu s'arrête si la grille est pleine et qu'aucun mouvement n'est possible.</li>
+        </ul>
+
+        <h2>Règles du Tusmo (Mot du jour)</h2>
+        <p>Inspiré du célèbre jeu télévisé, votre mission est de trouver un mot de 5 lettres caché.</p>
+        <ul>
+            <li>Vous avez <b>6 tentatives</b> au total.</li>
+            <li>Une lettre sur fond <b>Rouge</b> est bien placée.</li>
+            <li>Une lettre entourée d'un cercle <b>Jaune</b> est présente dans le mot, mais au mauvais endroit.</li>
+            <li>Une lettre sur fond <b>Bleu/Gris</b> n'est pas dans le mot.</li>
+            <li><b>Astuce :</b> Utilisez le clavier virtuel pour visualiser les lettres déjà testées !</li>
+        </ul>
+
+        <h2>Pourquoi jouer chaque jour ?</h2>
+        <p>Nos jeux sont conçus pour stimuler votre réflexion et votre mémoire. Que ce soit par le calcul mental avec le 2048 ou par l'orthographe avec le Tusmo, vous gardez votre esprit vif tout en vous amusant. Revenez demain pour un nouveau mot !</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Mes Jeux en Ligne - Tous droits réservés.</p>
+        <p><a href="#">Politique de Confidentialité</a> | <a href="#">Contact</a></p>
+    </footer>
+
 </body>
 </html>
-
-
-
-
