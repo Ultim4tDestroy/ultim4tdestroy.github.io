@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tusmo Pro</title>
+    <title>Tusmo Pro - Keyboard Colors</title>
     <style>
         body { background-color: #1a1a1a; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin: 0; padding: 10px; min-height: 100vh; box-sizing: border-box; }
         
-        /* Bouton maison uniquement */
         .btn-home { position: absolute; top: 15px; left: 15px; background: #444; color: white; text-decoration: none; padding: 10px; border-radius: 50%; font-size: 1.2rem; z-index: 100; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
 
         h1 { font-size: 2.2rem; margin: 10px 0; color: #00d4ff; letter-spacing: 5px; }
@@ -17,13 +16,14 @@
         .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
         .cell { aspect-ratio: 1/1; border: 2px solid #444; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 2.2rem; font-weight: bold; text-transform: uppercase; transition: background 0.3s; }
         
-        /* Style spécial pour la première lettre "bloquée" */
-        .cell-first { border-color: #00d4ff; color: #00d4ff; }
-
+        /* Couleurs de la grille */
         .correct { background-color: #e74c3c; border-color: #e74c3c; color: white !important; }
         .present { background-color: #f1c40f; border-color: #f1c40f; border-radius: 50%; color: white !important; }
         .absent { background-color: #34495e; border-color: #34495e; color: white !important; }
 
+        /* Couleurs du Clavier */
+        .key.key-correct { background-color: #e74c3c !important; }
+        .key.key-present { background-color: #f1c40f !important; }
         .key.key-absent { background-color: #222 !important; color: #555; }
 
         .keyboard { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 500px; margin-top: auto; padding-bottom: 10px; }
@@ -77,21 +77,19 @@
         let isGameOver = false;
         let discoveredLetters = {}; 
 
-        // Initialisation : On fige la lettre guide partout
+        // Initialisation : Grille propre
         for (let i = 0; i < 6; i++) {
             const row = document.createElement('div'); row.className = 'row';
             for (let j = 0; j < 5; j++) {
                 const cell = document.createElement('div'); cell.className = 'cell';
-                if(j === 0) {
-                    cell.innerText = targetWord[0];
-                    cell.classList.add('cell-first');
-                }
                 row.appendChild(cell);
             }
             grid.appendChild(row);
         }
+        
+        // On affiche la lettre d'aide sur la PREMIERE ligne direct
+        grid.children[0].children[0].innerText = targetWord[0];
 
-        // Support Clavier Physique
         window.addEventListener('keydown', (e) => {
             if (isGameOver) return;
             const key = e.key.toUpperCase();
@@ -114,7 +112,7 @@
 
         function updateGrid() {
             const row = grid.children[currentAttempt];
-            for (let i = 1; i < 5; i++) { // On ne touche JAMAIS à l'index 0
+            for (let i = 1; i < 5; i++) {
                 row.children[i].innerText = currentGuess[i] || "";
             }
         }
@@ -125,7 +123,8 @@
             if (!isGameOver) {
                 currentAttempt++;
                 currentGuess = targetWord[0]; 
-                updateGrid();
+                // La lettre guide apparaît direct sur la ligne suivante
+                grid.children[currentAttempt].children[0].innerText = targetWord[0];
             }
         }
 
@@ -133,11 +132,9 @@
             const row = grid.children[currentAttempt];
             const targetArr = targetWord.split('');
             
-            // 1. On force la première lettre à être la bonne au cas où
-            row.children[0].innerText = targetWord[0];
-
-            // 2. Lettres correctes
+            // 1. Lettres correctes
             for (let i = 0; i < 5; i++) {
+                row.children[i].innerText = guess[i];
                 if (guess[i] === targetWord[i]) {
                     row.children[i].classList.add('correct');
                     targetArr[i] = null;
@@ -145,13 +142,14 @@
                 }
             }
             
-            // 3. Lettres présentes ou absentes
+            // 2. Lettres présentes ou absentes
             for (let i = 0; i < 5; i++) {
                 if (!row.children[i].classList.contains('correct')) {
                     const idx = targetArr.indexOf(guess[i]);
                     if (idx !== -1) { 
                         row.children[i].classList.add('present'); 
                         targetArr[idx] = null;
+                        // Ne pas écraser si on a déjà trouvé qu'elle est "correct" ailleurs
                         if (discoveredLetters[guess[i]] !== 'correct') discoveredLetters[guess[i]] = 'present';
                     } else { 
                         row.children[i].classList.add('absent'); 
@@ -169,8 +167,12 @@
         function updateKeyboardUI() {
             for (let letter in discoveredLetters) {
                 const keyBtn = document.getElementById(`key-${letter}`);
-                if (keyBtn && discoveredLetters[letter] === 'absent') {
-                    keyBtn.classList.add('key-absent');
+                if (keyBtn) {
+                    const status = discoveredLetters[letter];
+                    keyBtn.classList.remove('key-correct', 'key-present', 'key-absent');
+                    if (status === 'correct') keyBtn.classList.add('key-correct');
+                    else if (status === 'present') keyBtn.classList.add('key-present');
+                    else if (status === 'absent') keyBtn.classList.add('key-absent');
                 }
             }
         }
